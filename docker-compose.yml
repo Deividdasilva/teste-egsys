@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    container_name: egsys_teste_api
+    build: .
+    ports: 
+      - 8081:8081
+    restart: on-failure
+    volumes:
+      - teste_egsys:/usr/src/app/
+    depends_on:
+      - database 
+    networks:
+      - teste_egsys
+
+  database:
+    image: postgres
+    container_name: egsys_teste_database
+    environment:
+      - POSTGRES_USER=${DB_USER}  
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST} 
+    ports:
+      - '5432:5432'
+    restart: on-failure
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - teste_egsys
+
+volumes:
+  teste_egsys:
+  database:
+
+networks:
+  teste_egsys:
